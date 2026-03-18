@@ -1,0 +1,9 @@
+{
+  "name": "game-system-designer-docx",
+  "version": "1.0.0",
+  "private": true,
+  "description": "游戏策划文档Word导出工具",
+  "dependencies": {
+    "docx": "^8.0.0"
+  }
+}

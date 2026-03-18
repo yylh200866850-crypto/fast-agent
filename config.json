@@ -1,0 +1,73 @@
+{
+  "defaultProvider": "bailian",
+  "fallbackProviders": ["deepseek", "qwen"],
+  "providers": {
+    "openai": {
+      "baseUrl": "https://api.openai.com/v1",
+      "model": "gpt-4o"
+    },
+    "claude": {
+      "baseUrl": "https://api.anthropic.com/v1",
+      "model": "claude-3-5-sonnet-20241022"
+    },
+    "azure": {
+      "baseUrl": "https://YOUR_RESOURCE.openai.azure.com",
+      "model": "gpt-4o",
+      "deployment": "your-deployment-name",
+      "apiVersion": "2024-02-15-preview"
+    },
+    "gemini": {
+      "baseUrl": "https://generativelanguage.googleapis.com/v1beta",
+      "model": "gemini-1.5-pro"
+    },
+    "deepseek": {
+      "baseUrl": "https://api.deepseek.com/v1",
+      "model": "deepseek-chat",
+      "apiKey": "sk-639b2a01a1d940bd8ab522c9094c6fbd"
+    },
+    "qwen": {
+      "baseUrl": "https://dashscope.aliyuncs.com/compatible-mode/v1",
+      "model": "qwen-max"
+    },
+    "bailian": {
+      "baseUrl": "https://dashscope.aliyuncs.com/compatible-mode/v1",
+      "model": "glm-5"
+    },
+    "doubao": {
+      "baseUrl": "https://ark.cn-beijing.volces.com/api/v3",
+      "model": "doubao-pro-32k"
+    },
+    "ollama": {
+      "baseUrl": "http://localhost:11434/v1",
+      "model": "llama3"
+    }
+  },
+  "mcp": {
+    "httpServer": {
+      "enabled": false,
+      "host": "127.0.0.1",
+      "port": 8080,
+      "accessControl": "whitelist",
+      "whitelist": ["127.0.0.1", "::1"],
+      "blacklist": [],
+      "apiKey": null,
+      "readOnly": false,
+      "disabledTools": ["system_exec"]
+    }
+  },
+  "database": {
+    "type": "local",
+    "local": {
+      "enabled": true,
+      "autoStart": true,
+      "port": 27017,
+      "host": "127.0.0.1",
+      "dbName": "fast_agent"
+    },
+    "cloud": {
+      "enabled": false,
+      "uri": "",
+      "dbName": "fast_agent"
+    }
+  }
+}

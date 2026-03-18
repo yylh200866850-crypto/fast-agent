@@ -1,0 +1,78 @@
+{
+  "name": "fast-agent",
+  "version": "1.0.0",
+  "type": "module",
+  "main": "index.js",
+  "bin": "index.js",
+  "pkg": {
+    "targets": [
+      "node18-win-x64",
+      "node18-macos-x64",
+      "node18-macos-arm64",
+      "node18-linux-x64"
+    ],
+    "outputPath": "release",
+    "assets": [
+      "skills/**/*",
+      "tools/**/*",
+      "providers/**/*",
+      "node_modules/**/*",
+      "mcp_http_server.js",
+      "config.json"
+    ],
+    "scripts": [
+      "index.js",
+      "interactive.js",
+      "web_server.js",
+      "skills.js",
+      "config.js",
+      "logger.js",
+      "conversation_store.js",
+      "mcp_http_server.js",
+      "tools/*.js",
+      "providers/*.js",
+      "skills/**/*.js"
+    ]
+  },
+  "scripts": {
+    "start": "node index.js",
+    "interactive": "node interactive.js",
+    "web": "node web.js",
+    "test:deepseek": "cross-env DEFAULT_PROVIDER=deepseek node interactive.js",
+    "test:qwen": "cross-env DEFAULT_PROVIDER=qwen node interactive.js",
+    "test:doubao": "cross-env DEFAULT_PROVIDER=doubao node interactive.js",
+    "test:openai": "cross-env DEFAULT_PROVIDER=openai node interactive.js",
+    "test:claude": "cross-env DEFAULT_PROVIDER=claude node interactive.js",
+    "test:gemini": "cross-env DEFAULT_PROVIDER=gemini node interactive.js",
+    "test:ollama": "cross-env DEFAULT_PROVIDER=ollama node interactive.js",
+    "build": "node scripts/build.mjs",
+    "build:win": "node scripts/build.mjs",
+    "build:mac": "node scripts/build.mjs",
+    "build:linux": "node scripts/build.mjs",
+    "build:all": "node scripts/build.mjs && cd dist && npx pkg interactive.cjs --targets node18-win-x64,node18-macos-x64,node18-macos-arm64,node18-linux-x64 --compress GZip --no-warnings --out-path ../release && node -e \"const fs=require('fs');const path=require('path');const src='../dist';const dest='../release';['skills','public','mongod'].forEach(d=>{const s=path.join(src,d);const d2=path.join(dest,d);if(fs.existsSync(s)){fs.cpSync(s,d2,{recursive:true});console.log('Copied:',d);}});['config.json','.env'].forEach(f=>{const s=path.join(src,f);const d2=path.join(dest,f);if(fs.existsSync(s)){fs.copyFileSync(s,d2);console.log('Copied:',f);}});\"",
+    "build:debug": "node scripts/build.mjs && cd dist && npx pkg interactive.cjs --debug --no-warnings --out-path ../release",
+    "pack:mongod": "node scripts/pack_mongod.mjs",
+    "download:mongod": "node scripts/download_mongod.mjs",
+    "download:mongod:all": "node scripts/download_mongod.mjs --all"
+  },
+  "dependencies": {
+    "@modelcontextprotocol/sdk": "^1.0.0",
+    "@pdf-lib/fontkit": "^1.1.1",
+    "docx": "^8.5.0",
+    "dotenv": "^17.3.1",
+    "express": "^5.2.1",
+    "mongodb": "^7.1.0",
+    "pdf-lib": "^1.17.1",
+    "pptxgenjs": "^3.12.0",
+    "puppeteer-core": "^24.39.1",
+    "uuid": "^13.0.0",
+    "xlsx": "^0.18.5"
+  },
+  "devDependencies": {
+    "esbuild": "^0.27.4",
+    "pkg": "^5.8.1",
+    "rcedit": "^5.0.2",
+    "resedit": "^3.0.2",
+    "sharp": "^0.34.5"
+  }
+}

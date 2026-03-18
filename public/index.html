@@ -1,0 +1,277 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Fast-Agent - 智能助手</title>
+  <link rel="icon" type="image/x-icon" href="logo.ico">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <!-- CSS 样式 -->
+  <link rel="stylesheet" href="css/variables.css">
+  <link rel="stylesheet" href="css/base.css">
+  <link rel="stylesheet" href="css/layout.css">
+  <link rel="stylesheet" href="css/components.css">
+  <link rel="stylesheet" href="css/responsive.css">
+</head>
+<body>
+  <div class="app-container">
+    <!-- Sidebar -->
+    <aside class="sidebar" id="leftSidebar">
+      <button class="sidebar-collapse-btn" onclick="toggleLeftSidebar()" title="折叠侧边栏">
+        <i class="fas fa-chevron-left"></i>
+      </button>
+      <div class="sidebar-header">
+        <div class="logo">
+          <img src="logo.jpg" alt="Fast-Agent">
+          <span>Fast-Agent</span>
+        </div>
+        <button class="new-chat-btn" onclick="createNewConversation()">
+          <i class="fas fa-plus"></i>
+          新对话
+        </button>
+      </div>
+      <div class="conversation-list" id="conversationList">
+        <!-- Conversations will be loaded here -->
+      </div>
+    </aside>
+    <!-- Left Sidebar Toggle (when collapsed) -->
+    <button class="sidebar-expand-btn left" id="leftSidebarExpand" onclick="toggleLeftSidebar()" title="展开对话列表">
+      <i class="fas fa-chevron-right"></i>
+    </button>
+
+    <!-- Main Content -->
+    <main class="main-content">
+      <header class="main-header">
+        <div class="header-title-wrapper">
+          <h1 class="header-title" id="conversationTitle">Fast-Agent 智能助手</h1>
+          <div class="version-selector" id="versionSelector" style="display:none;">
+            <button class="version-btn" onclick="UI.toggleVersionList()">
+              <span id="currentVersion">v1</span>
+              <i class="fas fa-chevron-down"></i>
+            </button>
+            <div class="version-list" id="versionList">
+              <!-- 版本列表将在这里动态生成 -->
+            </div>
+          </div>
+        </div>
+        <div class="header-actions">
+          <button class="header-btn" onclick="copyAllMessages()" id="copyAllBtn" style="display:none;">
+            <i class="fas fa-copy"></i>
+            复制全部
+          </button>
+          <button class="header-btn" onclick="clearConversation()" id="clearBtn" style="display:none;">
+            <i class="fas fa-trash"></i>
+            清空
+          </button>
+          <button class="header-btn primary" onclick="openSettings()">
+            <i class="fas fa-cog"></i>
+            设置
+          </button>
+        </div>
+      </header>
+
+      <div class="chat-container" id="chatContainer">
+        <div class="welcome-screen" id="welcomeScreen">
+          <i class="fas fa-comments"></i>
+          <h2>开始新对话</h2>
+          <p>选择左侧的对话记录或创建新对话，开始与 AI 助手交流</p>
+        </div>
+        <div class="messages" id="messages" style="display:none;">
+          <!-- Messages will be loaded here -->
+        </div>
+      </div>
+
+      <div class="input-container">
+        <div class="input-wrapper">
+          <div class="input-box">
+            <textarea 
+              id="messageInput" 
+              placeholder="输入消息... (Enter 发送, Shift+Enter 换行)"
+              rows="1"
+              onkeydown="handleKeyDown(event)"
+              oninput="autoResize(this)"
+            ></textarea>
+          </div>
+          <button class="send-btn" id="sendBtn" onclick="sendMessage()">
+            <i class="fas fa-paper-plane"></i>
+          </button>
+        </div>
+      </div>
+    </main>
+
+    <!-- Tools Panel -->
+    <aside class="tools-panel" id="toolsPanel">
+      <button class="sidebar-collapse-btn right" onclick="toggleToolsPanel()" title="折叠工具面板">
+        <i class="fas fa-chevron-right"></i>
+      </button>
+      <div class="tools-panel-header">
+        <h3><i class="fas fa-tools"></i> 工具调用</h3>
+      </div>
+      <div class="tools-panel-content" id="toolsPanelContent">
+        <div class="tools-empty">
+          <i class="fas fa-cog"></i>
+          <p>工具调用将在这里显示</p>
+        </div>
+      </div>
+    </aside>
+    <!-- Tools Panel Toggle (when collapsed) -->
+    <button class="sidebar-expand-btn right" id="toolsPanelExpand" onclick="toggleToolsPanel()" title="展开工具面板">
+      <i class="fas fa-chevron-left"></i>
+    </button>
+  </div>
+
+  <!-- Settings Modal -->
+  <div class="modal-overlay" id="settingsModal">
+    <div class="modal">
+      <div class="modal-header">
+        <h2 class="modal-title">设置</h2>
+        <button class="modal-close" onclick="closeSettings()">&times;</button>
+      </div>
+      <div class="tabs">
+        <button class="tab active" onclick="switchTab('general')">通用</button>
+        <button class="tab" onclick="switchTab('providers')">模型</button>
+        <button class="tab" onclick="switchTab('skills')">技能</button>
+        <button class="tab" onclick="switchTab('mcp')">MCP</button>
+      </div>
+      <div class="modal-body">
+
+        <!-- General Tab -->
+        <div class="tab-content active" id="tab-general">
+          <div class="form-group">
+            <label class="form-label">对话标题</label>
+            <input type="text" class="form-input" id="convTitleInput" placeholder="输入对话标题">
+          </div>
+          <div class="form-group">
+            <label class="form-label">系统提示词</label>
+            <textarea class="form-input" id="systemPromptInput" rows="4" placeholder="设置 AI 的角色和行为"></textarea>
+            <p class="form-hint">定义 AI 助手的角色、行为和能力</p>
+          </div>
+          <button class="header-btn primary" onclick="saveConversationSettings()" style="margin-top:16px;">
+            <i class="fas fa-save"></i>
+            保存设置
+          </button>
+        </div>
+
+        <!-- Providers Tab -->
+        <div class="tab-content" id="tab-providers">
+          <div class="form-group">
+            <label class="form-label">选择 LLM 提供商</label>
+            <div class="provider-list" id="providerList">
+              <!-- Providers will be loaded here -->
+            </div>
+          </div>
+        </div>
+
+        <!-- Skills Tab -->
+        <div class="tab-content" id="tab-skills">
+          <!-- Toolbar -->
+          <div class="skills-toolbar">
+            <button class="toolbar-btn primary" onclick="showImportFromUrl()">
+              <i class="fas fa-download"></i> 从 URL 安装
+            </button>
+            <label class="toolbar-btn" style="cursor:pointer;">
+              <i class="fas fa-file-import"></i> 导入 ZIP
+              <input type="file" accept=".zip" onchange="importSkillFromZip(event)" style="display:none;">
+            </label>
+            <button class="toolbar-btn" onclick="exportAllSkills()">
+              <i class="fas fa-file-export"></i> 导出全部
+            </button>
+            <button class="toolbar-btn" onclick="loadSkills()">
+              <i class="fas fa-sync"></i> 刷新
+            </button>
+          </div>
+
+          <!-- Drop Zone (hidden by default) -->
+          <div class="drop-zone" id="dropZone">
+            <i class="fas fa-cloud-upload-alt"></i>
+            <div>拖放 ZIP 文件到此处导入</div>
+          </div>
+
+          <div class="form-group">
+            <div class="skills-grid" id="skillsGrid">
+              <!-- Skills will be loaded here -->
+            </div>
+          </div>
+        </div>
+
+        <!-- MCP Tab -->
+        <div class="tab-content" id="tab-mcp">
+          <div class="toggle-group">
+            <div>
+              <div class="toggle-label">启用 MCP HTTP Server</div>
+              <div class="toggle-desc">允许外部程序通过 HTTP 调用工具</div>
+            </div>
+            <div class="toggle" id="mcpEnabled" onclick="toggleMCPEnabled()"></div>
+          </div>
+
+          <div class="form-group" style="margin-top:20px;">
+            <label class="form-label">访问控制</label>
+            <select class="form-select" id="accessControl" onchange="updateMCPConfig()">
+              <option value="all">允许所有</option>
+              <option value="whitelist">白名单模式</option>
+              <option value="blacklist">黑名单模式</option>
+            </select>
+          </div>
+
+          <div class="form-group" id="whitelistGroup" style="display:none;">
+            <label class="form-label">IP 白名单</label>
+            <div class="tags-container" id="whitelistTags">
+              <input type="text" class="tag-input" placeholder="输入 IP 后按 Enter" onkeydown="addWhitelist(event)">
+            </div>
+          </div>
+
+          <div class="form-group" id="blacklistGroup" style="display:none;">
+            <label class="form-label">IP 黑名单</label>
+            <div class="tags-container" id="blacklistTags">
+              <input type="text" class="tag-input" placeholder="输入 IP 后按 Enter" onkeydown="addBlacklist(event)">
+            </div>
+          </div>
+
+          <div class="toggle-group">
+            <div>
+              <div class="toggle-label">只读模式</div>
+              <div class="toggle-desc">禁用所有写入类工具</div>
+            </div>
+            <div class="toggle" id="readOnlyMode" onclick="toggleReadOnly()"></div>
+          </div>
+
+          <div class="form-group" style="margin-top:20px;">
+            <label class="form-label">禁用的工具</label>
+            <div class="tags-container" id="disabledToolsTags">
+              <input type="text" class="tag-input" placeholder="输入工具名后按 Enter" onkeydown="addDisabledTool(event)">
+            </div>
+            <p class="form-hint">例如: system_exec, file_delete</p>
+          </div>
+
+          <button class="header-btn primary" onclick="saveMCPConfig()" style="margin-top:16px;">
+            <i class="fas fa-save"></i>
+            保存 MCP 配置
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- URL Input Modal -->
+  <div class="url-input-modal" id="urlInputModal">
+    <h3><i class="fas fa-link"></i> 从 URL 安装技能</h3>
+    <input type="text" id="skillUrl" placeholder="输入 ZIP 文件 URL...">
+    <div class="modal-actions">
+      <button class="skill-btn" onclick="hideImportFromUrl()">取消</button>
+      <button class="skill-btn primary" onclick="installFromUrl()">安装</button>
+    </div>
+  </div>
+
+  <!-- Toast Container -->
+  <div class="toast-container" id="toastContainer"></div>
+
+  <!-- JavaScript 模块 -->
+  <script src="js/api.js"></script>
+  <script src="js/state.js"></script>
+  <script src="js/ui.js"></script>
+  <script src="js/conversation.js"></script>
+  <script src="js/skills.js"></script>
+  <script src="js/mcp.js"></script>
+  <script src="js/app.js"></script>
+</body>
+</html>

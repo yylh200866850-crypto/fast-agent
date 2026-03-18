@@ -1,0 +1,41 @@
+{
+  "version": "7.0.4",
+  "description": "MongoDB mongod binaries for Fast-Agent",
+  "baseUrl": "https://fast-agent.oss-cn-hangzhou.aliyuncs.com/mongod",
+  "platforms": {
+    "win32-x64": {
+      "file": "mongod.win",
+      "execName": "mongod.exe",
+      "size": 79649280,
+      "sha256": "50f56c2b29f3e8fc414adb062b540c5d0c3c0ea3482b9a12875a74ff6fbefbdb",
+      "note": "Windows x64"
+    },
+    "darwin-x64": {
+      "file": "mongod.mac_x86",
+      "execName": "mongod",
+      "size": 158065408,
+      "sha256": "a9efe2fe4728621d762d1a36450efd51e5ce030e0a09e9efe8abc65ffa60bc21",
+      "note": "macOS Intel (x86_64)"
+    },
+    "darwin-arm64": {
+      "file": "mongod.mac_arm64",
+      "execName": "mongod",
+      "size": 147837968,
+      "sha256": "37e1656df8c55deb98928196ada454b243d6b641f2bf76958b9ccd85e6d36b55",
+      "note": "macOS Apple Silicon (ARM64)"
+    },
+    "linux-x64": {
+      "file": "mongod.linux",
+      "execName": "mongod",
+      "size": 221671648,
+      "sha256": "08b192e3fcfe01ef1046c379e83e21ccdd20694fd49c816ef642dec6d9cf1882",
+      "note": "Linux x64"
+    }
+  },
+  "downloadUrl": {
+    "win32-x64": "https://fast-agent.oss-cn-hangzhou.aliyuncs.com/mongod/mongod.win",
+    "darwin-x64": "https://fast-agent.oss-cn-hangzhou.aliyuncs.com/mongod/mongod.mac_x86",
+    "darwin-arm64": "https://fast-agent.oss-cn-hangzhou.aliyuncs.com/mongod/mongod.mac_arm64",
+    "linux-x64": "https://fast-agent.oss-cn-hangzhou.aliyuncs.com/mongod/mongod.linux"
+  }
+}

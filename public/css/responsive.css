@@ -1,0 +1,128 @@
+/* 响应式样式 */
+
+/* 中等屏幕：工具面板默认折叠 */
+@media (max-width: 1200px) {
+  .tools-panel {
+    width: 0;
+    min-width: 0;
+    border-left: none;
+  }
+
+  .tools-panel .tools-panel-header,
+  .tools-panel .tools-panel-content,
+  .tools-panel .sidebar-collapse-btn {
+    opacity: 0;
+    visibility: hidden;
+  }
+
+  .sidebar-expand-btn.right {
+    display: flex;
+  }
+
+  .tools-panel:not(.collapsed) {
+    width: 320px;
+    min-width: 320px;
+    border-left: 1px solid var(--border);
+  }
+
+  .tools-panel:not(.collapsed) .tools-panel-header,
+  .tools-panel:not(.collapsed) .tools-panel-content,
+  .tools-panel:not(.collapsed) .sidebar-collapse-btn {
+    opacity: 1;
+    visibility: visible;
+  }
+
+  .tools-panel:not(.collapsed) ~ .sidebar-expand-btn.right {
+    display: none;
+  }
+}
+
+/* 小屏幕：左侧栏变为浮动，工具面板默认隐藏 */
+@media (max-width: 768px) {
+  .sidebar {
+    position: fixed;
+    left: -280px;
+    top: 0;
+    bottom: 0;
+    z-index: 100;
+    transition: left 0.3s;
+    width: 280px;
+    min-width: 280px;
+  }
+
+  .sidebar.open,
+  .sidebar:not(.collapsed) {
+    left: 0;
+  }
+
+  .sidebar-collapse-btn {
+    display: none;
+  }
+
+  .sidebar-expand-btn.left {
+    display: flex;
+    position: fixed;
+    left: 0;
+  z-index: 99;
+  }
+
+  .sidebar.open ~ .sidebar-expand-btn.left,
+  .sidebar:not(.collapsed) ~ .sidebar-expand-btn.left {
+    display: none;
+  }
+
+  .tools-panel {
+    position: fixed;
+    right: -320px;
+    top: 0;
+    bottom: 0;
+    z-index: 100;
+    transition: right 0.3s;
+    width: 320px;
+    min-width: 320px;
+    border-left: 1px solid var(--border);
+  }
+
+  .tools-panel.open,
+  .tools-panel:not(.collapsed) {
+    right: 0;
+  }
+
+  .tools-panel .sidebar-collapse-btn {
+    display: none;
+  }
+
+  .sidebar-expand-btn.right {
+    display: flex;
+    position: fixed;
+    right: 0;
+    z-index: 99;
+  }
+
+  .tools-panel.open ~ .sidebar-expand-btn.right,
+  .tools-panel:not(.collapsed) ~ .sidebar-expand-btn.right {
+    display: none;
+  }
+
+  .modal {
+    width: 95%;
+    max-height: 85vh;
+  }
+
+  .main-content {
+    width: 100%;
+  }
+}
+
+/* 超小屏幕 */
+@media (max-width: 480px) {
+  .sidebar {
+    width: 100%;
+    left: -100%;
+  }
+
+  .tools-panel {
+    width: 100%;
+    right: -100%;
+  }
+}
