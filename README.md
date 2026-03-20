@@ -36,18 +36,13 @@
 
 | 提供商 | 获取 API Key |
 |--------|-------------|
-| OpenAI | https://platform.openai.com/api-keys |
-| Claude (Anthropic) | https://console.anthropic.com/ |
-| Google Gemini | https://aistudio.google.com/apikey |
-| DeepSeek | https://platform.deepseek.com/ |
-| 通义千问 (Qwen) | https://dashscope.console.aliyun.com/ |
 | 阿里百炼 | https://bailian.console.aliyun.com/ |
-| Azure OpenAI | https://portal.azure.com/ |
-| Ollama (本地) | 无需 API Key |
+| 智谱GLM | https://www.zhipuai.cn/ |
+| DeepSeek | https://platform.deepseek.com/ |
 
 ## 功能特性
 
-- 🤖 **多模型支持**：OpenAI、Claude、Gemini、DeepSeek、Qwen 等
+- 🤖 **多模型支持**：GLM、DeepSeek、Qwen 等
 - 🛠️ **工具调用**：支持函数调用和工具循环
 - 📦 **技能系统**：可扩展的技能模块
 - 💾 **本地存储**：内嵌 MongoDB，数据本地存储
