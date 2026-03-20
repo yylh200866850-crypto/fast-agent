@@ -1,156 +1,122 @@
 # Fast-Agent
 
-一个轻量级、可扩展的 AI Agent 框架，支持多种 LLM 提供商和插件化技能系统。
+一个轻量级的 LLM Agent 框架，支持多种大语言模型提供商。
 
-## 特性
+## 项目愿景
 
-- **多 LLM 提供商支持** - OpenAI、Claude、Gemini、Azure、DeepSeek、Qwen、Ollama 等
-- **插件化技能系统** - 通过 Skill 扩展 Agent 能力，支持动态加载
-- **内置工具集** - 文件操作、HTTP 请求、MongoDB、系统命令等
-- **流式输出** - 支持流式响应和工具调用
-- **故障转移** - 自动切换备用 LLM 提供商
-- **Web 界面** - 内置 Web 服务器和聊天界面
-- **MCP 协议** - 支持 Model Context Protocol
-
-## 架构
-
-```
-┌─────────────────────────────────────────────────────────────┐
-│                        Fast-Agent                            │
-├─────────────────────────────────────────────────────────────┤
-│  ┌─────────────┐  ┌─────────────┐  ┌─────────────────────┐  │
-│  │   Agent     │  │  Providers  │  │    SkillManager     │  │
-│  │  (核心引擎)  │──│ (LLM 适配)  │──│    (插件系统)        │  │
-│  └──────┬──────┘  └─────────────┘  └──────────┬──────────┘  │
-│         │                                      │             │
-│         └──────────────────┬───────────────────┘             │
-│                            ▼                                 │
-│  ┌──────────────────────────────────────────────────────┐   │
-│  │                    Tools (工具层)                      │   │
-│  │  file_* │ http_* │ mongo_* │ system_* │ utils_*      │   │
-│  └──────────────────────────────────────────────────────┘   │
-│                            ▼                                 │
-│  ┌──────────────────────────────────────────────────────┐   │
-│  │                   Skills (技能层)                      │   │
-│  │  pdf │ xlsx │ docx │ pptx │ image │ web_search │ ... │   │
-│  └──────────────────────────────────────────────────────┘   │
-└─────────────────────────────────────────────────────────────┘
-```
-
-### 核心模块
-
-| 模块 | 说明 |
-|------|------|
-| `Agent` | 核心 Agent 引擎，处理对话循环和工具调用 |
-| `Providers` | LLM 提供商适配层，统一不同 API 接口 |
-| `SkillManager` | 技能管理器，动态加载和执行 Skill |
-| `Tools` | 内置工具集，提供基础能力 |
-
-### 目录结构
-
-```
-fast-agent/
-├── index.js              # Agent 主入口
-├── web.js                # Web 服务入口
-├── providers/            # LLM 提供商
-│   ├── base.js           # 基类
-│   ├── openai.js         # OpenAI 兼容
-│   ├── claude.js         # Claude
-│   └── gemini.js         # Gemini
-├── skills/               # 技能插件
-│   ├── pdf/              # PDF 处理
-│   ├── xlsx/             # Excel 处理
-│   ├── docx/             # Word 处理
-│   ├── image/            # 图像处理
-│   └── ...               # 更多技能
-├── tools/                # 内置工具
-│   ├── file.js           # 文件操作
-│   ├── http.js           # HTTP 请求
-│   ├── mongo.js          # MongoDB
-│   └── system.js         # 系统命令
-├── public/               # Web 界面
-└── config.js             # 配置管理
-```
+通过工程化架构设计，让国产大模型在复杂任务场景下发挥超越其参数规模的实战能力。
 
 ## 快速开始
 
-### 安装
+### 1. 下载
+
+从 [Releases](https://github.com/user/fast-agent/releases) 页面下载对应平台的版本：
+
+- **Windows**: `fast-agent-win-x64.zip`
+- **macOS (Intel)**: `fast-agent-macos-x64.zip`
+- **macOS (Apple Silicon)**: `fast-agent-macos-arm64.zip`
+- **Linux**: `fast-agent-linux-x64.zip`
+
+### 2. 解压并运行
+
+解压下载的压缩包，双击可执行文件启动。
+
+### 3. 配置
+
+首次启动会自动弹出配置向导：
+
+1. **选择 AI 模型提供商**（如 DeepSeek、OpenAI、Claude 等）
+2. **输入 API Key**
+3. **测试连接**
+4. **保存配置**
+
+配置完成后即可开始对话！
+
+## 支持的 LLM 提供商
+
+| 提供商 | 获取 API Key |
+|--------|-------------|
+| OpenAI | https://platform.openai.com/api-keys |
+| Claude (Anthropic) | https://console.anthropic.com/ |
+| Google Gemini | https://aistudio.google.com/apikey |
+| DeepSeek | https://platform.deepseek.com/ |
+| 通义千问 (Qwen) | https://dashscope.console.aliyun.com/ |
+| 阿里百炼 | https://bailian.console.aliyun.com/ |
+| Azure OpenAI | https://portal.azure.com/ |
+| Ollama (本地) | 无需 API Key |
+
+## 功能特性
+
+- 🤖 **多模型支持**：OpenAI、Claude、Gemini、DeepSeek、Qwen 等
+- 🛠️ **工具调用**：支持函数调用和工具循环
+- 📦 **技能系统**：可扩展的技能模块
+- 💾 **本地存储**：内嵌 MongoDB，数据本地存储
+- 🌐 **Web 界面**：现代化的 Web 界面
+- 🔒 **隐私安全**：所有数据本地存储，不上传云端
+
+## 手动配置（可选）
+
+如果需要手动配置，可以复制 `.env_r` 为 `.env` 并填写：
 
 ```bash
-git clone https://github.com/your-username/fast-agent.git
-cd fast-agent
-npm install
+# 复制模板
+cp .env_r .env
+
+# 编辑 .env 文件
+DEEPSEEK_API_KEY=sk-your-api-key
+DEFAULT_PROVIDER=deepseek
 ```
 
-### 配置
+## MongoDB 说明
 
-创建 `.env` 文件：
+程序首次启动时会自动下载 MongoDB（约 80-220MB，视平台而定）。
 
-```env
-# 日志级别
-LOG_LEVEL=INFO
+下载地址：`https://fast-agent.oss-cn-hangzhou.aliyuncs.com/mongod/`
 
-# 默认 LLM 提供商
-DEFAULT_PROVIDER=openai
+如果下载失败，可以手动下载对应平台的 mongod 文件放到 `mongod/` 目录。
 
-# API Keys
-OPENAI_API_KEY=sk-xxx
-# 或其他提供商
-DEEPSEEK_API_KEY=sk-xxx
-QWEN_API_KEY=sk-xxx
+## 系统要求
+
+- **Windows**: Windows 10/11 (x64)
+- **macOS**: macOS 11+ (Intel 或 Apple Silicon)
+- **Linux**: glibc 2.17+ (x64)
+
+## 常见问题
+
+### Q: 启动后无法访问 Web 界面？
+
+确保端口 3000 没有被占用。可以在 `.env` 文件中修改端口：
+
+```
+PORT=3001
 ```
 
-### 运行
+### Q: MongoDB 启动失败？
 
-```bash
-# 命令行交互模式
-npm run interactive
+1. 检查端口 27017 是否被占用
+2. 在 `config.json` 中修改 `mongod.port`
+3. 或使用云数据库：设置 `mongod.cloud.enabled = true`
 
-# Web 界面模式
-npm run web
-```
+### Q: API Key 无效？
 
-## 技能开发
+1. 确认 API Key 是否正确
+2. 确认账户是否有余额
+3. 尝试在配置向导中测试连接
 
-创建自定义技能非常简单：
+## 更多信息
 
-```javascript
-// skills/my_skill/main.js
-export default {
-  name: 'my_skill',
-  description: '我的自定义技能',
-  parameters: {
-    type: 'object',
-    properties: {
-      input: { type: 'string', description: '输入内容' }
-    },
-    required: ['input']
-  },
-  async execute(params, context) {
-    // 你的逻辑
-    return { result: '处理完成' };
-  }
-};
-```
-
-## 多智能体架构（规划中）
-
-Fast-Agent 正在开发多智能体协作架构，这是本项目的核心演进方向。敬请期待。
-
-## 贡献
-
-欢迎贡献代码、报告问题或提出建议！
-
-1. Fork 本仓库
-2. 创建特性分支 (`git checkout -b feature/amazing-feature`)
-3. 提交更改 (`git commit -m 'Add amazing feature'`)
-4. 推送到分支 (`git push origin feature/amazing-feature`)
-5. 创建 Pull Request
-
-## 许可证
-
-本项目采用 [GPL v3](LICENSE) 许可证开源。
+- [完整文档](https://github.com/user/fast-agent/blob/main/MAINTAINER.md)
+- [问题反馈](https://github.com/user/fast-agent/issues)
 
 ## 致谢
 
-感谢所有开源项目和贡献者让 Fast-Agent 成为可能。
+感谢以下企业和机构对国产大模型发展的贡献：
+
+- 静申数字
+- [阿里云](https://www.aliyun.com/) - 通义千问，百炼，瑶池数据库
+- [智谱GLM](https://www.zhipuai.cn/) - 智谱AI
+- [DeepSeek](https://www.deepseek.com/) - 深度求索
+
+## License
+
+MIT

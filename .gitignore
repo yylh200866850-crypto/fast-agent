@@ -17,19 +17,18 @@ mongodb-windows-x86_64-enterprise-8.2.5.zip
 # 发布准备目录
 github-release/
 
-# mongod 目录（配置文件除外）
-mongod/*.exe
-mongod/*.dll
-mongod/*.win
-mongod/*.linux
-mongod/*.mac_x86
-mongod/*.mac_arm64
+# mongod 二进制文件（不提交到 Git，从 OSS 下载）
+mongod/mongod.win
+mongod/mongod.linux
+mongod/mongod.mac_x86
+mongod/mongod.mac_arm64
 mongod/data/
 mongod/log/
 
 # 保留配置文件
 !mongod/mongod-resources.json
-!mongod/*.cfg
-!mongod/*.bat
 skills.js
 data/temp/
+
+mongod/*.exe
+mongod/*.dll
