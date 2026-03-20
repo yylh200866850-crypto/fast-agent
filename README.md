@@ -25,7 +25,7 @@
 
 首次启动会自动弹出配置向导：
 
-1. **选择 AI 模型提供商**（如 DeepSeek、OpenAI、Claude 等）
+1. **选择 AI 模型提供商**（如 GLM、DeepSeek、Qwen 等）
 2. **输入 API Key**
 3. **测试连接**
 4. **保存配置**
